@@ -6,7 +6,7 @@ import Grid from '../template/grid'
 import IconButton from '../template/iconButton'
 
 /* import das actions*/ 
-import { changeDescription, search } from './todoActions'
+import { add, changeDescription, search } from './todoActions'
 
 
 class TodoForm extends Component {
@@ -20,10 +20,11 @@ class TodoForm extends Component {
     }
 
     keyHandler(e) {
+        const { add, search, description } = this.props
          // precionando Enter vai add
         if (e.key === 'Enter') {
             // precionando shift + enter vai pesquisar
-            e.shiftKey ? this.props.handleSearch() : this.props.handleAdd()
+            e.shiftKey ? search() : add(description)
         // precionar esc limpa a tabela
         } else if (e.key === 'Escape') {
             props.handleClear() 
@@ -31,6 +32,7 @@ class TodoForm extends Component {
     }
 
     render() {
+        const { add, search, description } = this.props
         return (
             <div role='form' className='todoForm'>
             <Grid cols='12 9 10'>
@@ -46,10 +48,10 @@ class TodoForm extends Component {
         
             <Grid cols='12 3 2'> 
                 <IconButton style='primary' icon='fa-plus'
-                    onClick={this.props.handleAdd}>
+                    onClick={() => add(description)}>
                 </IconButton>  
                 <IconButton style='info' icon='fa-search'
-                    onClick={this.props.handleSearch}>
+                    onClick={() => search()}>
                 </IconButton>
                 <IconButton style='default' icon='fa-times'
                     onClick={this.props.handleClear}>
@@ -62,7 +64,7 @@ class TodoForm extends Component {
   
 const mapStateToProps = state => ({description: state.todo.description})
 const mapDispatchToProps = dispatch => 
-      bindActionCreators({ changeDescription, search }, dispatch )
+      bindActionCreators({ add, changeDescription, search }, dispatch )
 export default connect(mapStateToProps, mapDispatchToProps)(TodoForm)
 
 
